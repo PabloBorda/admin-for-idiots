@@ -1,0 +1,85 @@
+<html>
+
+  <title>PPMENU</title>
+
+
+  <script type="text/javascript">
+
+
+
+
+    function set_normal(item_name){
+      var menu_item = $("input[type='image'][name*='" + item_name + "']"); 
+	  image_to_set = menu_item.attr('src').replace("mouseover","normal");
+      menu_item.attr('src',image_to_set);
+    }
+
+    function set_mouseover(item_name){
+     var menu_item = $("input[type='image'][name*='" + item_name + "']"); 
+	 image_to_set = menu_item.attr('src').replace("normal","mouseover");
+	 menu_item.attr('src',image_to_set);
+    }
+
+
+
+    function refresh(normal_or_mouseover){
+
+        var i=0;
+        images = $("input[type='image']");
+        for (i=0;i<images.size;i++){
+        	
+
+      	  if (normal_or_mouseover == 'normal'){
+            set_mouseover(images[i].attr("name"));
+    	  } else {
+            set_normal(images[i].attr("name"));
+    	  }
+
+        }
+
+
+
+    }
+
+
+
+
+    function toggle_menu(item_name){
+      if (item_name.indexOf("_menu")>-1){    	    	
+        var menu_item = $("input[type='image'][name*='" + item_name + "']"); 
+        if (menu_item.attr('src').indexOf("normal") > -1){
+           refresh("mouseover");
+           set_mouseover(item_name);          
+        } else {
+          refresh("normal");
+          set_normal(item_name);
+
+        }
+      }    	
+    }
+
+
+  </script>
+
+
+  <body>
+    <div align="left"><img src="/images/pplogo.png"/></div>
+      <br>
+      <br>
+      <div name="menu" align="left">
+        
+        <input type="image" src="/images/myinbox_normal.png" name="myinbox_menu" onmouseover="toggle_menu('myinbox_menu');">
+        <input type="image" src="/images/queues_normal.png" name="queues_menu" onmouseover="toggle_menu('queues_menu');">
+
+
+        <input type="image" src="/images/logout_normal.png" name="logout_menu" onmouseover="toggle_menu('logout_menu');">
+
+      </div>
+<!--
+    <div style="bottom: 100%">
+      <a class="coinbase-button" data-code="a4a0f52c0096bf878e1e106e35cf4b5f" data-button-style="donation_large" href="https://www.coinbase.com/checkouts/a4a0f52c0096bf878e1e106e35cf4b5f">Donate Bitcoins</a><script src="https://www.coinbase.com/assets/button.js" type="text/javascript"></script>
+    </div> -->
+  </body>
+
+
+</html>

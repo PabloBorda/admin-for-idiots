@@ -1,0 +1,62 @@
+
+
+<html>
+
+<title>admin for idiots - Backend Tool</title>
+
+<body>
+  <div align="left">
+    <textarea id="tag" name="tag" cols="80" rows="10"></textarea>
+    <br/>
+    <label> Easier ticket browsing... </label>
+    <div id="output">
+    
+    
+    </div>
+
+   </div>
+
+
+
+
+    <form action="/learn" method="post" enctype="multipart/form-data">
+      <label>Upload your ticket database (Text only)</label>
+      <input name="learnfile" type="file"/>
+      <input type="submit" />
+    </form>
+
+
+
+   <div align="left">
+     <label> Input minimum request example </label>
+     <textarea id="correct" name="correct" cols="40" rows="10"></textarea>
+     
+     <label> Input request to compare </label>
+     <textarea id="verify" name="verify" cols="40" rows="10"></textarea>
+     
+     <button id="check" onclick="check();" name="check">CHECK!</button>
+     
+      <label id="result"> </label>
+   </div>
+
+
+ 
+
+
+  <div align="left">
+
+
+    <form action="/mts-database-download"> 
+      <label>From date (not below 06-01-02)</label>
+      <input name="fromdate"/>
+      <label>Today (no further today YY-MM-DD format)</label>
+      <input name="todate"/>
+      <input type="submit"/>
+    </form>
+
+
+  </div>
+</body>
+
+</html>
+

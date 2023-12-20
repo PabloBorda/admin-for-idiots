@@ -1,0 +1,35 @@
+
+
+
+
+
+#addons = { :transaction_id => /[[[\s][\n]]]([[0-9][A-Z]]{17})[[[\s][\n]]]/,
+#           :ticket_number => /(([0-9]{6})-([0-9]{6}))/,
+#          :account_number => /[[[\s][\n]]][0-9]{19}[[[\s][\n]]]/,
+#           :account_email => /[[[\s][\n]]](\S*@\S*)[[[\s][\n]]]/,
+#           :token => /(EC-[[0-9][A-Z]]{17})/,
+#          :cal => /[[[\s][\n]]]((?=.{0,12}\d)[a-z\d]{13})[[[\s][\n]]]/ } 
+
+
+
+#addons = { :transaction_id => /\s(?=(\w){17})(?=([^A-Z][A-Z]){1,16})(?=([^\d]*[\d]{1,16})).*\s/,
+#           :ticket_number => /(([0-9]{6})-([0-9]{6}))/,
+#           :account_number => /\s(?=(\d{19})).*\s/,
+#           :account_email => /(?=([\S]*[\s]{0}))\S*@\S*/,
+#           :token => /\s(EC-[[0-9][A-Z]]{17})\s/,
+#           :cal => /[[[a-z][A-Z][0-9]]\s\n]((?=.{0,12}\d)[a-z\d]{13})[[[a-z][A-Z][0-9]]\s\n]/ } 
+
+
+
+#addons = {
+         #  :transaction_id => Proc.new { /[[[\s][\n]]]([[0-9][A-Z]]{17})[[[\s][\n]]]/ }, 
+ #          :ticket_number => Proc.new { /(([0-9]{6})-([0-9]{6}))/ },
+ #          :account_number => Proc.new { /([0-9]{19})/ }
+         #  :account_email => Proc.new { /[[[\s][\n]]](\S*@\S*)[[[\s][\n]]]/ },
+         #  :token => Proc.new { /(EC-[[0-9][A-Z]]{17})/ },
+         #  :cal => Proc.new { /[[[\s][\n]]]((?=.{0,12}\d)[a-z\d]{13})[[[\s][\n]]]/ }
+         
+
+#}
+
+

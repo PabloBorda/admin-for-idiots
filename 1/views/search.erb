@@ -1,0 +1,251 @@
+<html>
+
+  <title> Admin tools for idiots </title>
+  
+<!--
+  <link href="/javascripts/jquery-ui/jquery-ui.structure.min.cs" rel="stylesheet">
+
+  <link href="/javascripts/jquery-ui/jquery-ui.theme.min.css" rel="stylesheet">
+-->
+
+
+
+ <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/ui-darkness/jquery-ui.min.css" rel="stylesheet">  
+
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+
+<style>
+    .loading {
+      display: none;
+      width: 16px;
+      height: 16px;
+      background-image: url(loading.gif);
+      vertical-align: text-bottom;
+    }
+    /* autocomplete adds the ui-autocomplete-loading class to the textbox when it is _busy_, use general sibling combinator ingeniously */
+    #autocomplete.ui-autocomplete-loading ~ .loading {
+      display: inline-block;
+    }
+    .ui-autocomplete .iknow {
+      margin-right: 1em;
+      font-size: larger;
+      font-color: white;
+    }
+
+ul.ui-autocomplete
+{
+    position: absolute;
+    top: 0px!important;
+    right: 0px!important;
+    width: 450px!important;
+    
+}
+
+    
+  </style>
+
+ 
+ <script type="text/javascript">
+ 
+ 
+   function check(){
+        var t = $("#correct").val().toString();
+        var u = $("#verify").val().toString();
+        $.get( "/validate_request", JSON.stringify({ "original_request": t, "compare_to": u })).done(function( data ) { 
+            $("#result").html(data); 
+          });
+   }
+ 
+
+ 
+   $(document).ready(function(){
+   
+   
+      $("#tag").on('change keyup paste', function() {
+       
+        var t = $("#tag").val();
+        $.post( "/parse", { ticket: t.toString() }).done(function( data ) { 
+            $("#output").html(JSON.stringify(data)); 
+          });
+      });
+
+
+     $("#autocomplete").autocomplete({
+        delay: 500,
+        minLength: 2,
+        source: function(request, response) {
+          var separate_current_paragraphs = request.term.split("\n");
+         // latest_words = separate_current_paragraphs[separate_current_paragraphs.length - 1].toString().split(" ");
+          //latest_words_as_string = (latest_words[latest_words.length-1] + " " + latest_words[latest_words.length-2]);
+          var last_paragraph = separate_current_paragraphs[separate_current_paragraphs.length - 1].toString();
+          $.getJSON("/suggest_me", {                  
+            
+            q: last_paragraph
+           //q: request.term
+          }, function(data) {
+            // data is an array of objects and must be transformed for autocomplete to use
+            var array = data.error ? [] : $.map(data.suggestions, function(m) {
+              return {
+                q: m.q,
+                iknow: m.iknow
+                
+              };
+            });
+            response(array);
+          });
+        },
+        focus: function(event, ui) {
+          // prevent autocomplete from updating the textbox
+          event.preventDefault();
+        },
+        select: function(event, ui) {
+
+          // prevent autocomplete from updating the textbox
+          event.preventDefault();
+          
+
+          //alert(JSON.stringify(event));
+          //alert(JSON.stringify(ui));
+               
+
+          // the .replace below needs to work only in the last matched typed string, not the previous ones
+
+          var updated_text_content = $("#autocomplete").val().substring(0,$("#autocomplete").val().lastIndexOf(ui.item.q)) + '\n';
+
+
+
+          //$("#autocomplete").val($("#autocomplete").val().replace(ui.item.q,'') + '\r\n' + ui.item.iknow);
+          
+          var ticket_text = updated_text_content + ui.item.iknow;
+
+          $("#autocomplete").val(ticket_text);
+
+          // navigate to the selected item's url
+          //window.open(ui.item.url);
+        }
+      }).data("ui-autocomplete")._renderItem = function(ul, item) {
+        var $a = $("<a></a>");
+
+        var text_to_highlight = item.q.toString();
+        //var text_to_highlight = $("#autocomplete").val();
+        
+        //var words_to_highlight = text_to_highlight.split(" ");
+        
+        //var text_highlighted = "";
+        //for(var s in words_to_highlight){
+           var text_highlighted = item.iknow.replace(text_to_highlight,("<b><font color='yellow'>" + text_to_highlight + "</font><b> "));
+        //}
+
+                
+        $("<span class='iknow'></span>").append(text_highlighted).appendTo($a);
+
+
+        return $("<li></li>").append($a).appendTo(ul);
+      };
+
+
+
+
+     });
+ 
+
+ //http://www.marcofolio.net/webdesign/a_fancy_apple.com-style_search_suggestion.html
+ 
+ </script>
+ 
+
+
+
+
+
+
+
+
+
+
+  <body>
+
+
+  <div>
+    <label>Edit your ticket answer</label><br/>
+    <textarea id="autocomplete" name="answereditor" cols="120" rows="40"></textarea>
+    <!--<input type="text" id="autocomplete" name="country"/>-->
+
+
+  </div>
+
+<br/>
+<br/>
+<br/>
+
+
+
+   <div align="left">
+    <textarea id="tag" name="tag" cols="80" rows="10"></textarea>
+    <br/>
+    <label> Easier ticket browsing... </label>
+    <div id="output">
+    
+    
+    </div>
+
+   </div>
+<br/>
+<br/>
+<br/>
+
+
+
+    <form action="/learn" method="post" enctype="multipart/form-data">
+      <label>Upload your ticket database (Text only)</label>
+      <input name="learnfile" type="file"/>
+      <input type="submit" />
+    </form>
+
+
+<br/>
+   <div align="left">
+     <label> Input minimum request example </label>
+     <textarea id="correct" name="correct" cols="40" rows="10"></textarea>
+     
+     <label> Input request to compare </label>
+     <textarea id="verify" name="verify" cols="40" rows="10"></textarea>
+     
+     <button id="check" onclick="check();" name="check">CHECK!</button>
+     
+      <label id="result"> </label>
+   </div>
+
+<br/>
+ 
+
+
+  <div align="left">
+
+
+    <form action="/mts-database-download"> 
+      <label>From date (not below 06-01-02)</label>
+      <input name="fromdate"/>
+      <label>Today (no further today YY-MM-DD format)</label>
+      <input name="todate"/>
+      <input type="submit"/>
+    </form>
+
+
+  </div>
+
+
+
+
+ 
+
+
+
+
+
+  </body>
+
+
+</html>

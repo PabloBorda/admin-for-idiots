@@ -1,0 +1,31 @@
+
+
+
+
+
+
+
+
+
+source 'http://rubygems.org'
+ 
+ruby '2.2.0'
+gem 'sinatra',:git => 'https://github.com/sinatra/sinatra.git'
+gem 'tilt', '~>1.4.1'
+gem 'sinatra-assetpack', :require => 'sinatra/assetpack'
+gem 'rack', '=1.6.0'
+ 
+group :test do
+  gem 'minitest', '~> 5.4'
+  gem 'rack-test'
+  gem 'nokogiri'
+  gem 'to_regexp'
+  gem 'thin'
+  gem 'mongo'
+  gem 'mechanize'
+  gem 'levenshtein'
+  gem 'bson'
+  gem 'bson_ext'
+  gem 'rerun'
+end
+

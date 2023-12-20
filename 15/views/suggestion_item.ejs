@@ -1,0 +1,65 @@
+
+
+
+<style type="text/css">
+
+.knows {
+  font-size: 10px !important;
+}
+
+
+
+.autocomplete-element{
+    height: 100px;
+    overflow-y: auto;
+}
+
+
+
+
+
+
+</style>
+
+<script type="text/javascript">
+
+function imgError(image) {
+    image.onerror = "";
+    image.src = "/images/nopic.png";
+    return true;
+}
+
+
+
+
+
+</script>
+
+
+
+<table class="autocomplete-element" width="100%" height>
+  <tr>
+    <td width="100%">
+      <table>
+        <tr>
+          <td>
+            <input type="image" alt="FORK!" src="/images/fork.jpg" name="fork" onclick="fork_note(<%=data[1]%>,<%=data[0]%>)"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="item_content">
+            <input type="image" src="/images/fork.jpg" name="fork" onclick="view_ticket(<%=data[1]%>,<%=data[0]%>)"/>
+          </td>
+        </tr>
+      </table>
+    </td> 
+    <td width="100%">
+      <span class="knows">
+        <%= data[2] %>
+      </span>
+    </td>
+    <td width="100%" class="pics" align="right">
+      <img onerror="imgError(this)" src="http://myhub.corp.ebay.com/User%20Photos/Profile%20Pictures/_w/corp_<%= data[3] %>_MThumb_jpg.jpg"/>
+    </td>
+  </tr>
+</table>

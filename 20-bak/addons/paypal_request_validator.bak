@@ -1,0 +1,44 @@
+  get '/validate_request*' do
+  
+  
+    puts "PARAMS ARE [" 
+  
+  
+    original = request_instance(params[:original_request].to_s)
+    compare_to = request_instance(params[:compare_to].to_s)
+  
+  
+    
+  
+  
+  
+    puts "THIS IS THE DIFFERENCE SET "
+    print_array(set_to_array((original - compare_to)))
+    puts "THIS IS SET ORIGINAL "
+    print_array(set_to_array((original)))
+    puts "THIS IS SET COMPARE_TO "
+    print_array(set_to_array((compare_to)))
+    
+    
+      
+    #original = URI::encode(set_to_array(request_instance(params[:original_request])).to_s)
+    #compare_to = URI::encode(set_to_array(request_instance(params[:compare_to])).to_s)
+
+      if (compare_to.length < original.length)
+        puts "Please verify the following parameters that seem to be wrong: " + URI::encode(set_to_array(original - compare_to).to_json)
+      
+    
+      else
+        if ((compare_to.length-original.length)==0)
+          puts "All parameters seem OK"
+         
+        else
+          puts "Missing parameters" + URI::encode(set_to_array(original - compare_to).to_json)
+        end
+      end 
+   
+      puts "RETURN " + URI::encode(set_to_array(compare_to - original).to_json)
+      return URI::encode((set_to_array(compare_to - original)).to_json)
+    
+    end
+    

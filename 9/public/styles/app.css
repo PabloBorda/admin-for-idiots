@@ -1,0 +1,100 @@
+ .loading {
+      display: none;
+      width: 16px;
+      height: 16px;
+      background-image: url(loading.gif);
+      vertical-align: text-bottom;
+    }
+    /* autocomplete adds the ui-autocomplete-loading class to the textbox when it is _busy_, use general sibling combinator ingeniously */
+    #autocomplete1.ui-autocomplete-loading ~ .loading {
+      display: inline-block;
+    }
+    .ui-autocomplete .knows {
+      margin-right: 1em;
+      font-size: larger;
+      color: white;
+    }
+
+ul.ui-autocomplete
+{
+    
+    top: 0px!important;
+    right: 0!important;
+    width: 29%!important;
+    
+}
+
+
+.ui-menu {
+  margin: 0;
+}
+
+.ui-widget {
+  font-size: 0.9em;
+
+}
+
+.ui-autocomplete {
+  cursor: default;
+  position: fixed;
+  left: 70%!important;
+}
+
+
+div.editable {
+    width: 70%;
+    height: 90%;
+    border: 1px solid #ccc;
+    padding: 5px;
+    background: #FFFFFF!important;
+    color: black!important;
+}
+
+    .knows {
+      margin-right: 1em;
+      font-size: larger;
+      color: white!important;
+    }
+
+    .autocomplete-element {
+
+      table-layout: fixed;
+    }
+
+    .pics {
+      width: 75px;
+      
+    }
+
+    .accordion {
+
+    }
+ 
+    .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+
+      background: #0C8DC4!important;
+      border: 1px solid #253B80!important;
+    }
+
+
+    .ui-widget-content {
+      color: white!important;
+
+    }
+
+
+
+    .ui-widget-content a {
+      color: blue!important;
+
+    }
+
+
+   #toggle {
+     width: 20%;
+     height: 100%;
+     background: #ccc;
+     position: absolute;
+     top: 0;
+     left: 0;
+   }

@@ -1,0 +1,61 @@
+<div>
+<h3>
+  <a href="#">
+    <table>
+      <tr>
+        <td>
+          <img onerror="imgError(this)" src="<%=data[0]%>"/>        
+        </td>
+        <td valign="middle">
+          <table>
+            <tr>
+              <td>
+                <label id="name"><%= data[1] %></label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+               <label id="timestamp"><%= data[3] %></label>
+              <td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <div align="right" width="100%">
+            <label id="status"><%= data[4] %></label>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </a>
+</h3>
+<div>
+<table>
+  <tr>
+    <td>
+      <label>Suggest anything</label>
+      <input type="checkbox" name="suggest_anything"/>
+    </td>
+    <td>
+      <label>Suggest MTS tickets</label>
+      <input type="checkbox" name="suggest_only_tickets"/>
+    </td>
+    <td>
+      <label>Suggest developer.paypal.com text</label>
+      <input type="checkbox" name="suggest_developer_paypal_com"/>
+    </td>
+    <td>
+      <label>Suggest Jira Tickets</label>
+      <input type="checkbox" name="suggest_anything"/>
+    </td>    
+  <tr>
+</table>
+<p>
+
+ <div id="autocomplete<%=data[2]%>" name="message<%=data[2]%>" class="editable" contenteditable="true">
+
+ </div>
+
+</p>
+</div>
+</div>

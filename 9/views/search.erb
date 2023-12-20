@@ -1,0 +1,192 @@
+<html>
+
+  <title> Admin tools for idiots </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  
+<!--
+  <link href="/javascripts/jquery-ui/jquery-ui.structure.min.cs" rel="stylesheet">
+
+  <link href="/javascripts/jquery-ui/jquery-ui.theme.min.css" rel="stylesheet">
+-->
+
+
+
+ <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/ui-darkness/jquery-ui.min.css" rel="stylesheet">  
+ <link href="/styles/app.css" rel="stylesheet">  
+ <link href="/styles/slidebar.css" rel="stylesheet">  
+
+
+  <script src="/javascripts/nonmini/jquery.js"></script>
+  <script src="/javascripts/nonmini/jquery-ui.js"></script>
+  <script src="/javascripts/nonmini/slidebars.js"></script>
+  <script src="/javascripts/nonmini/apps.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<body>
+  <div id="sb-site">
+
+
+  <button id="sliding-menu">OPEN</button><br>
+  <div id="toggle">
+ 
+
+  </div>
+
+
+
+
+
+  <div>
+
+
+
+
+
+  <div class="accordion">
+    <h3>Subject</h3>
+  <div>
+    <p>    
+      <div id="autocomplete1" name="message1" class="editable"></div>    
+    </p>
+  </div>
+  <h3>Subject</h3>
+  <div>
+    <p> 
+      <div id="autocomplete2" name="message2" class="editable"></div>
+    </p>
+  </div>
+  <h3>Subject</h3>
+  <div>
+    <p> 
+      <div id="autocomplete3" name="message3" class="editable"></div>
+    </p>
+    
+  </div>
+  <h3>Subject</h3>
+  <div>
+    <p>
+      <div id="autocomplete4" name="message3" class="editable"></div>
+      </p>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+  </div>
+
+<br/>
+<br/>
+<br/>
+
+
+
+   <div align="left">
+    <textarea id="tag" name="tag" cols="80" rows="10"></textarea>
+    <br/>
+    <label> Easier ticket browsing... </label>
+    <div id="output">
+    
+    
+    </div>
+
+   </div>
+<br/>
+<br/>
+<br/>
+
+
+
+    <form action="/learn" method="post" enctype="multipart/form-data">
+      <label>Upload your ticket database (Text only)</label>
+      <input name="learnfile" type="file"/>
+      <input type="submit" />
+    </form>
+
+
+<br/>
+   <div align="left">
+     <label> Input minimum request example </label>
+     <textarea id="correct" name="correct" cols="40" rows="10"></textarea>
+     
+     <label> Input request to compare </label>
+     <textarea id="verify" name="verify" cols="40" rows="10"></textarea>
+     
+     <button id="check" onclick="check();" name="check">CHECK!</button>
+     
+      <label id="result"> </label>
+   </div>
+
+<br/>
+ 
+
+
+  <div align="left">
+
+
+    <form action="/mts-database-download"> 
+      <label>From date (not below 06-01-02)</label>
+      <input name="fromdate"/>
+      <label>Today (no further today YY-MM-DD format)</label>
+      <input name="todate"/>
+      <input type="submit"/>
+    </form>
+
+
+  </div>
+
+
+
+
+ 
+
+
+
+
+</div>
+
+
+
+
+
+<div class="sb-slidebar sb-left">
+  <!-- Your left Slidebar content. -->
+</div>
+
+
+
+
+
+  </body>
+
+
+</html>

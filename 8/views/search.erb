@@ -1,0 +1,412 @@
+<html>
+
+  <title> Admin tools for idiots </title>
+  
+<!--
+  <link href="/javascripts/jquery-ui/jquery-ui.structure.min.cs" rel="stylesheet">
+
+  <link href="/javascripts/jquery-ui/jquery-ui.theme.min.css" rel="stylesheet">
+-->
+
+
+
+ <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/ui-darkness/jquery-ui.min.css" rel="stylesheet">  
+
+
+  <script src="/javascripts/nonmini/jquery.js"></script>
+  <script src="/javascripts/nonmini/jquery-ui.js"></script>
+
+
+<style>
+    .loading {
+      display: none;
+      width: 16px;
+      height: 16px;
+      background-image: url(loading.gif);
+      vertical-align: text-bottom;
+    }
+    /* autocomplete adds the ui-autocomplete-loading class to the textbox when it is _busy_, use general sibling combinator ingeniously */
+    #autocomplete.ui-autocomplete-loading ~ .loading {
+      display: inline-block;
+    }
+    .ui-autocomplete .knows {
+      margin-right: 1em;
+      font-size: larger;
+      color: white;
+    }
+
+ul.ui-autocomplete
+{
+    
+    top: 0px!important;
+    right: 0!important;
+    width: 29%!important;
+    
+}
+
+
+.ui-menu {
+  margin: 0;
+}
+
+.ui-widget {
+  font-size: 0.9em;
+
+}
+
+.ui-autocomplete {
+  cursor: default;
+  position: fixed;
+  left: 70%!important;
+}
+
+
+div.editable {
+    width: 70%;
+    height: 90%;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+    .knows {
+      margin-right: 1em;
+      font-size: larger;
+      font-color: white!important;
+    }
+
+    .autocomplete-element {
+
+      table-layout: fixed;
+    }
+
+    .pics {
+      width: 75px;
+      
+    }
+
+   
+  </style>
+
+ 
+ <script type="text/javascript">
+ 
+ 
+   function check(){
+        var t = $("#correct").val().toString();
+        var u = $("#verify").val().toString();
+        $.get( "/validate_request", JSON.stringify({ "original_request": t, "compare_to": u })).done(function( data ) { 
+            $("#result").html(data);  
+          });
+   }
+ 
+
+
+$.fn.focusEnd = function() {
+    $(this).focus();
+    var tmp = $('<span />').appendTo($(this)),
+        node = tmp.get(0),
+        range = null,
+        sel = null;
+
+    if (document.selection) {
+        range = document.body.createTextRange();
+        range.moveToElementText(node);
+        range.select();
+    } else if (window.getSelection) {
+        range = document.createRange();
+        range.selectNode(node);
+        sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+    tmp.remove();
+    return this;
+}
+
+   
+
+   
+
+
+
+
+
+   $(document).ready(function(){
+   
+   
+      $ticket_process_stats = [];
+
+      var latest_q = "";
+    
+
+      var processed = function(array,str){
+        return (jQuery.grep(array,function (str){
+                  return (this.matched==str);
+                }).length > 0);
+      }
+
+      $('#autocomplete').each(function(){
+        this.contentEditable = true;
+      });
+
+
+       var parsecall = function(){        
+        var currentText = $("#autocomplete").html();
+        $.post( "/parse", { ticket: currentText }).done(function( data ) {       
+             //alert(JSON.stringify(data));
+             console.log(data);
+             if (!processed($ticket_process_stats,latest_q)){
+               $ticket_process_stats.push({matched: latest_q,parsed: true,render: true });
+               if (!$("#autocomplete").html().contains(latest_q)){
+                 $("#autocomplete").html($("#autocomplete").html().replace(currentText,data));
+                 $("#autocomplete").focusEnd();
+               }
+               
+            } 
+
+          });
+        
+   
+
+       }
+
+       var delayed; 
+       $("#autocomplete").on('input', function() { times_parse=0;clearTimeout(delayed); delayed = setTimeout(function() {     
+             parsecall();
+           
+        }, 1000); });
+
+
+   
+
+      $("#autocomplete").keypress(function (e) {
+        var key = e.which;
+        if(key == 13)  // the enter key code
+        {
+          
+          console.log($("#autocomplete").html());
+        }
+       });   
+
+
+
+var $ac =  $("#autocomplete").autocomplete({
+        isMultiline: true,
+        delay: 300,
+        minLength: 4,
+        source: function(request, response) {       
+          var separate_current_paragraphs = $("#autocomplete").html().toString().replace("<br>","");
+          console.log ("Separate current paragraphs" + JSON.stringify(separate_current_paragraphs));
+         // latest_words = separate_current_paragraphs[separate_current_paragraphs.length - 1].toString().split(" ");
+          //latest_words_as_string = (latest_words[latest_words.length-1] + " " + latest_words[latest_words.length-2]);                
+          var last_paragraph = separate_current_paragraphs[separate_current_paragraphs.length - 1];
+          console.log ("Last last_paragraph: " + last_paragraph);
+          //parsecall();
+          latest_q = separate_current_paragraphs
+          $.getJSON("/suggest_me", {                  
+            q: separate_current_paragraphs
+           //q: request.term
+          }, function(data) {
+            // data is an array of objects and must be transformed for autocomplete to use
+            var array = data.error ? [] : $.map(data.suggestions, function(m) {
+              return {
+                q: m.q,
+                mr: m.mr,
+                knows: m.knows,
+                for_: m.for,
+                and_these_guys_agree: m.and_these_guys_agreee
+                
+              };
+            });
+            response(array);
+          });
+        },
+        focus: function(event, ui) {
+          // prevent autocomplete from updating the textbox
+          event.preventDefault();
+        },
+        search: function(event,ui){
+          //parsecall();
+
+        },
+        select: function(event, ui) {
+
+          // prevent autocomplete from updating the textbox
+          //event.preventDefault();
+          
+
+          //alert(JSON.stringify(event));
+          //alert(JSON.stringify(ui));
+               
+
+          // the .replace below needs to work only in the last matched typed string, not the previous ones
+
+          var updated_text_content = $("#autocomplete").text().substring(0,$("#autocomplete").text().lastIndexOf(ui.item.q)) + "<br>";
+
+
+
+          //$("#autocomplete").val($("#autocomplete").val().replace(ui.item.q,'') + '\r\n' + ui.item.knows);
+          
+          var ticket_text = updated_text_content + ui.item.knows;
+          ticket = ticket_text;
+          
+          
+          $("#autocomplete").html(ticket.toString());
+         
+          
+
+          $("#autocomplete").focusEnd();
+
+
+          // navigate to the selected item's url
+          //window.open(ui.item.url);
+        }
+      });
+
+
+
+
+
+        $ac.data("ui-autocomplete")._renderItem = function(ul, item) {
+          var $a = $("<a></a>");
+        
+
+          var text_to_highlight = item.q.toString();
+          var text_highlighted = item.knows.replace(text_to_highlight,("<label style=\"color: yellow!important;\">" + text_to_highlight + "</label>"));
+
+          var markup = "<table class=\"autocomplete-element \"width=\"100%\"><tr><td><span class=\"knows\">" + text_highlighted + "</span></td><td class=\"pics\" align=\"right\"><img src=\"" + item.mr.toString() + "\"/></td></tr></table>";
+
+
+           $a.append(markup);
+      
+           return $("<li></li>").append($a).appendTo(ul);
+         };
+
+        // $ac.data("ui-autocomplete")._move = function( direction, event ) {
+        //   if ( !this.menu.element.is( ":visible" ) ) {
+        //     this.search( null, event );
+        //     return;
+        //   }
+        //   if ( this.menu.isFirstItem() && /^previous/.test( direction ) ||
+        //     this.menu.isLastItem() && /^next/.test( direction ) ) {
+        //     //this._value( this.term ); <-- Here it is!
+        //     this.menu.blur();
+        //     return;
+        //   }
+        //   this.menu[ direction ]( event );
+        // }
+
+
+
+
+
+
+
+     });
+ 
+
+ //http://www.marcofolio.net/webdesign/a_fancy_apple.com-style_search_suggestion.html
+ 
+ </script>
+ 
+
+
+
+
+
+
+
+
+
+
+  <body>
+
+
+  <div>
+    <label>Edit your ticket answer</label><br/>
+    <!--<textarea id="autocomplete" name="answereditor" cols="120" rows="40"></textarea>-->
+
+    <div id="autocomplete" name="answereditor" class="editable"></div>
+    <!--<input type="text" id="autocomplete" name="country"/>-->
+
+    
+
+
+
+
+
+  </div>
+
+<br/>
+<br/>
+<br/>
+
+
+
+   <div align="left">
+    <textarea id="tag" name="tag" cols="80" rows="10"></textarea>
+    <br/>
+    <label> Easier ticket browsing... </label>
+    <div id="output">
+    
+    
+    </div>
+
+   </div>
+<br/>
+<br/>
+<br/>
+
+
+
+    <form action="/learn" method="post" enctype="multipart/form-data">
+      <label>Upload your ticket database (Text only)</label>
+      <input name="learnfile" type="file"/>
+      <input type="submit" />
+    </form>
+
+
+<br/>
+   <div align="left">
+     <label> Input minimum request example </label>
+     <textarea id="correct" name="correct" cols="40" rows="10"></textarea>
+     
+     <label> Input request to compare </label>
+     <textarea id="verify" name="verify" cols="40" rows="10"></textarea>
+     
+     <button id="check" onclick="check();" name="check">CHECK!</button>
+     
+      <label id="result"> </label>
+   </div>
+
+<br/>
+ 
+
+
+  <div align="left">
+
+
+    <form action="/mts-database-download"> 
+      <label>From date (not below 06-01-02)</label>
+      <input name="fromdate"/>
+      <label>Today (no further today YY-MM-DD format)</label>
+      <input name="todate"/>
+      <input type="submit"/>
+    </form>
+
+
+  </div>
+
+
+
+
+ 
+
+
+
+
+
+  </body>
+
+
+</html>
